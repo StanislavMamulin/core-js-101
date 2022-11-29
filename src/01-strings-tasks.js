@@ -239,8 +239,34 @@ function getRectangleString(width, height) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const getEncryptedCharCode = (charCode) => {
+    const BIG_A_CHAR_CODE = 'A'.charCodeAt();
+    const BIG_Z_CHAR_CODE = 'Z'.charCodeAt();
+    const SMALL_A_CHAR_CODE = 'a'.charCodeAt();
+    const SMALL_Z_CHAR_CODE = 'z'.charCodeAt();
+
+    if (
+      (charCode >= BIG_A_CHAR_CODE && charCode <= BIG_Z_CHAR_CODE)
+      || (charCode >= SMALL_A_CHAR_CODE && charCode <= SMALL_Z_CHAR_CODE)
+    ) {
+      const ROTATE_AMOUNT = 13; // ROT13
+      const ALPHABET_LETTERS = 26;
+
+      const firstLetterCode = charCode >= 97 ? SMALL_A_CHAR_CODE : BIG_A_CHAR_CODE;
+      return firstLetterCode + ((charCode - firstLetterCode + ROTATE_AMOUNT) % ALPHABET_LETTERS);
+    }
+
+    return charCode;
+  };
+
+  return str.split('')
+    .map((char) => {
+      const currentCharCode = char.charCodeAt();
+      const newCharCode = getEncryptedCharCode(currentCharCode);
+      return String.fromCharCode(newCharCode);
+    })
+    .join('');
 }
 
 /**
